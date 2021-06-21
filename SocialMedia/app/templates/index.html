@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Social Media Assignment 2</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../static/assets/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+        
+	</head>
+	<body>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						
+						<!--Start of the written stuff-->
+                        <h1><strong>Assignment 2 Data Mining from Social Media</strong></h1>
+						<ul class="icons">
+							<!--<li><a href="/api/getTwitter" class="icon style2 fa-twitter"><span class="label">Twitter</span></a></li>
+							<a href="/api/getTumblr" class="icon style2 fa-tumblr"><span class="label">Tumblr</span></a></li>-->
+                            <li><a class="icon style1 fa-twitter" id="getTwitterData"><span class="label">Twitter</span></a></li>
+							<li><a class="icon style1 fa-tumblr" id="getTumblrData"><span class="label">Tumblr</span></a></li>
+						</ul>
+
+						<h2>Made By</h2>
+                        <h2><strong>Aryaman Chaudhary</strong></h2>
+						
+					</header>
+
+			</div>
+    <!-- Twitter Modal START-->
+    <div id="twitterModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="twitterClose">&times;</span>
+          <h1 class="modal-title"><a class="icon style2 fa-twitter"></a>  Twitter Data</h1>
+          <table id="twitterTable" class="modal-table" style="width:100%">
+           <!-- DataTable START-->
+            <thead>
+                    <tr>
+                        <th>Tweet Number</th>
+                        <th>Tweet Text</th>
+                        <th>Source Account</th>
+                        <th>Created At</th>
+                        <th>Likes Count</th>
+                        <th>Language</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Tweet Number</th>
+                        <th>Tweet Text</th>
+                        <th>Source Account</th>
+                        <th>Created At</th>
+                        <th>Likes Count</th>
+                        <th>Language</th>
+                    </tr>
+                </tfoot>
+              </table>
+              <!-- DataTable END-->
+        </div>
+      </div>
+      <!-- Twitter Modal END -->
+
+      <!-- Tumblr Modal START-->
+    <div id="tumblrModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="tumblrClose">&times;</span>
+          <h1 class="modal-title"><a class="icon style2 fa-tumblr"></a>  Tumblr Data</h1>
+          <table id="tumblrTable" class="modal-table" style="width:100%">
+           <!-- DataTable START-->
+            <thead>
+                    <tr>
+                        <th>Post Number</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>URL</th>
+                        <th>Post Creation</th>
+                        <th>Content</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Post Number</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>URL</th>
+                        <th>Post Creation</th>
+                        <th>Content</th>
+                    </tr>
+                </tfoot>
+              </table>
+              <!-- DataTable END-->
+        </div>
+      </div>
+      <!-- Tumblr Modal END -->
+
+      
+      <script>
+            //get twitter modal
+            var twitterModal = document.getElementById("twitterModal");
+            //get tumblr modal
+            var tumblrModal = document.getElementById("tumblrModal");
+            //Post twitter Modal
+            var postTwitterModal = document.getElementById("postTwitterModal");
+            //Post Tumblr Modal
+            var postTumblrModal = document.getElementById("postTumblrModal");
+
+            // Get the <span> element that closes the modal
+            var twitterClose = document.getElementsByClassName("twitterClose")[0];
+            // Get the <span> element that closes the modal
+            var tumblrClose = document.getElementsByClassName("tumblrClose")[0];
+            // Get the <span> element that closes the modal
+            var postTwitterClose = document.getElementsByClassName("postTwitterClose")[0];
+            // Get the <span> element that closes the modal
+            var postTumblrClose = document.getElementsByClassName("postTumblrClose")[0];
+            //onclick function for getTwitterData button
+            document.getElementById("getTwitterData").onclick = function(){
+                twitterModal.style.display = "block";
+                twitterClose.onclick = function() {
+                    twitterModal.style.display = "none";
+                    }
+                window.onclick = function(event) {
+                    if (event.target == twitterModal) {
+                        twitterModal.style.display = "none";
+                    }
+                }
+            }
+            //onclick function for getTumblrData button
+            document.getElementById("getTumblrData").onclick = function(){
+                tumblrModal.style.display = "block";
+                tumblrClose.onclick = function() {
+                    tumblrModal.style.display = "none";
+                    }
+                window.onclick = function(event) {
+                    if (event.target == tumblrModal) {
+                        tumblrModal.style.display = "none";
+                    }
+                }
+            }
+            
+            
+            function setupData() {
+                $(document).ready(function () {
+                    var twitterTable = $('#twitterTable').DataTable({
+                        "ajax": {
+                            "url": "/api/viewTweets", //run get
+                            "dataType": "json",
+                            "dataSrc": "data",
+                            "contentType":"application/json",
+                        },
+                        "columns": [
+                            {"data": "status_num"},
+                            {"data": "status_text"},
+                            {"data": "status_name"},
+                            {"data": "status_createdAt"},
+                            {"data": "status_favouriteCount"},
+                            {"data": "status_lang"}
+                        ] 
+                    });
+                    var tumblrTable = $('#tumblrTable').DataTable({
+                        "ajax": {
+                            "url": "/api/viewTumblr", //run get
+                            "dataType": "json",
+                            "dataSrc": "data",
+                            "contentType":"application/json",
+                        },
+                        "columns": [
+                            {"data": "post_number"},
+                            {"data": "post_title"},
+                            {"data": "post_type"},
+                            {"data": "post_url"},
+                            {"data": "post_createdAt"},
+                            {"data": "post_content"}
+                        ] 
+                    });
+                });
+            }
+            $( window ).on( "load", setupData );
+      </script>
+	</body>
+</html>
